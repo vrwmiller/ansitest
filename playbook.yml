@@ -1,0 +1,32 @@
+---
+
+- hosts: tag_Name_hostileadminWebServer
+  user: ec2-user
+  become: yes
+  become_user: root
+  tasks:
+  - name: Enable EPEL
+    command: amazon-linux-extras install epel -y
+  - name: Install nginx
+    command: amazon-linux-extras install nginx1 -y
+  - name: Install packages
+    yum:
+      name:
+        - git
+        - nc
+        - '*'
+      state: latest
+  - name: Prepare to checkout git repo
+    file:
+      state: absent
+      path: /usr/share/nginx/html/
+  - name: Git checkout
+    git:
+      repo: 'https://github.com/vrwmiller/petabit.io'
+      dest: /usr/share/nginx/html
+      accept_hostkey: yes
+      version: master
+  - name: Start nginx
+    service:
+      name: nginx
+      state: started
