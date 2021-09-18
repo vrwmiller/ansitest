@@ -1,6 +1,6 @@
 ---
 
-- hosts: tag_Name_hostileadminWebServer
+- hosts: tag_Name_hostileadminweb
   user: ec2-user
   become: yes
   become_user: root
@@ -9,11 +9,18 @@
     command: amazon-linux-extras install epel -y
   - name: Install nginx
     command: amazon-linux-extras install nginx1 -y
-  - name: Install packages
+  - name: Install git
+    yum:
+      name: git
+      state: latest
+  - name: Install netcat
     yum:
       name:
-        - git
         - nc
+      state: latest
+  - name: Update the rest
+    yum:
+      name:
         - '*'
       state: latest
   - name: Prepare to checkout git repo
