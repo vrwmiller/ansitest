@@ -9,16 +9,15 @@
     command: amazon-linux-extras install epel -y
   - name: Install nginx
     command: amazon-linux-extras install nginx1 -y
-  - name: Install git
+  - name: Install packages
     yum:
-      name: git
+      name: "{{ item }}"
       state: latest
-  - name: Install netcat
-    yum:
-      name:
-        - nc
-      state: latest
-  - name: Update the rest
+    with_items:
+      - git
+      - nc
+      - nmap
+  - name: Update installed packages
     yum:
       name:
         - '*'
