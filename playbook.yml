@@ -40,4 +40,8 @@
     - name: Start nginx
       service:
         name: nginx
-        state: started
+        enabled: yes
+        state: restarted
+    - name: Reboot
+      reboot:
+      when: reboot == "true"
