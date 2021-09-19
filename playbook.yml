@@ -1,48 +1,48 @@
 ---
 
-- hosts: tag_Name_hostileadminweb
+- name: AWS Web Setup
+  hosts: tag_Name_hostileadminweb
   user: ec2-user
   become: yes
   become_user: root
-  vars:
-    update: false
-    deployweb: false
+  vars_files:
+    - vars/main.yml
   tasks:
-  - name: Enable EPEL
-    command: amazon-linux-extras install epel -y
-    when: update == "true"
-  - name: Install nginx
-    command: amazon-linux-extras install nginx1 -y
-    when: update == "true"
-  - name: Install packages
-    yum:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - git
-      - nc
-      - nmap
-    when: update == "true"
-  - name: Update installed packages
-    yum:
-      name:
-        - '*'
-      state: latest
-    when: update == "true"
-  - name: Prepare to checkout git repo
-    file:
-      state: absent
-      path: /usr/share/nginx/html/
-    when: deployweb == "true"
-  - name: Git checkout
-    git:
-      repo: 'https://github.com/vrwmiller/petabit.io'
-      dest: /usr/share/nginx/html
-      accept_hostkey: yes
-      single_branch: yes
-      version: master
-    when: deployweb == "true"
-  - name: Start nginx
-    service:
-      name: nginx
-      state: started
+    - name: Enable EPEL
+      command: amazon-linux-extras install epel -y
+      when: update == "true"
+    - name: Install nginx
+      command: amazon-linux-extras install nginx1 -y
+      when: update == "true"
+    - name: Install packages
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - git
+        - nc
+        - nmap
+      when: update == "true"
+    - name: Update installed packages
+      yum:
+        name:
+          - '*'
+        state: latest
+      when: update == "true"
+    - name: Prepare to checkout git repo
+      file:
+        state: absent
+        path: /usr/share/nginx/html/
+      when: deployweb == "true"
+    - name: Git checkout
+      git:
+        repo: 'https://github.com/vrwmiller/petabit.io'
+        dest: /usr/share/nginx/html
+        accept_hostkey: yes
+        single_branch: yes
+        version: master
+      when: deployweb == "true"
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
