@@ -39,7 +39,7 @@
       repo: 'https://github.com/vrwmiller/petabit.io'
       dest: /usr/share/nginx/html
       accept_hostkey: yes
-      bare: yes
+      single_branch: yes
       version: master
     when: deployweb == "true"
   - name: Start nginx
