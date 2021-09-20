@@ -35,7 +35,7 @@
       when: deployweb == "true"
     - name: Clone git repo
       git:
-        repo: 'https://github.com/vrwmiller/petabit.io'
+        repo: '{{ siterepo }}'
         dest: "{{ docroot }}"
         accept_hostkey: yes
         single_branch: yes
