@@ -26,13 +26,14 @@
         - nmap
         - '*'
       when: update == "true"
+      notify: Reboot
 
-    - name: Prepare to checkout git repo
+    - name: Setup filesystem for git repo
       file:
         state: absent
         path: "{{ docroot  }}"
       when: deployweb == "true"
-    - name: Git checkout
+    - name: Clone git repo
       git:
         repo: 'https://github.com/vrwmiller/petabit.io'
         dest: "{{ docroot }}"
@@ -41,12 +42,12 @@
         version: master
       when: deployweb == "true"
 
-    - name: Start nginx
+    - name: Restart nginx
       service:
         name: nginx
         enabled: yes
         state: restarted
 
+  handlers:
     - name: Reboot
       reboot:
-      when: reboot == "true"
